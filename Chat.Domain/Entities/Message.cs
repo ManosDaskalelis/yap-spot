@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chat.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,11 @@ namespace Chat.Domain.Entities
 
         public string Content { get; set; } = null!;
 
-        public MessageType Type { get; set; }
+        public MessageTypeEnum Type { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public DateTime? EditedAtUtc { get; set; }
         public DateTime? DeletedAtUtc { get; set; }
-        public MessageMetadata? Metadata { get; set; }
+        //public MessageMetadata? Metadata { get; set; }
         public ICollection<MessageReaction> Reactions { get; set; } = [];
     }
 }
