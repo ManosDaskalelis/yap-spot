@@ -1,0 +1,6 @@
+@ChatRoomHub_HostAddress = http://localhost:5087
+
+GET {{ChatRoomHub_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

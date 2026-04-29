@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Chat.Domain.Entities
+{
+    public class MessageReaction
+    {
+        public Guid MessageId { get; set; }
+        public Message Message { get; set; } = null!;
+
+        public Guid UserGuid { get; set; }
+        public User User { get; set; } = null!;
+        public string Emoji { get; set; } = null!;
+        public DateTime CreatedAtUtc { get; set; }
+    }
+}
