@@ -23,4 +23,3 @@ namespace Chat.Domain.Entities
         public ICollection<Message> Messages { get; set; } = [];
     }
 }
-}

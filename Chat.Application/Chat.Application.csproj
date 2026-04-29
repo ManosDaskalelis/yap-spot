@@ -8,6 +8,17 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\" />
+    <Folder Include="Common\" />
+    <Folder Include="Messages\" />
+    <Folder Include="Reactions\" />
+    <Folder Include="Rooms\" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="MediatR" />
+		<PackageReference Include="FluentValidation" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+	</ItemGroup>
+	
 </Project>
