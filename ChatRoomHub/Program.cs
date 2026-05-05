@@ -1,3 +1,4 @@
+using Chat.Infrastructure;
 
 namespace ChatRoomHub
 {
@@ -9,6 +10,7 @@ namespace ChatRoomHub
 
             // Add services to the container.
             builder.Services.AddAuthorization();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
