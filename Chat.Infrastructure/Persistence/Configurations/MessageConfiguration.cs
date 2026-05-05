@@ -1,10 +1,12 @@
 ﻿using Chat.Domain.Entities;
+using Chat.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Chat.Infrastructure.Persistence.Configurations
@@ -34,6 +36,14 @@ namespace Chat.Infrastructure.Persistence.Configurations
 
             builder.Property(x => x.DeletedAtUtc)
                 .IsRequired(false);
+
+            builder.Property(x => x.Metadata)
+            .HasColumnType("jsonb")
+            .HasConversion(
+              metadata => JsonSerializer.Serialize(metadata, null as JsonSerializerOptions),
+              json => JsonSerializer.Deserialize<MessageMetadata>(json, null as JsonSerializerOptions)
+          )
+          .IsRequired(false);
 
             builder.HasOne(x => x.Room)
             .WithMany(x => x.Messages)

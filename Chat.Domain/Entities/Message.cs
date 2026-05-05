@@ -1,4 +1,5 @@
 ﻿using Chat.Domain.Enums;
+using Chat.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Chat.Domain.Entities
         public DateTime CreatedAtUtc { get; set; }
         public DateTime? EditedAtUtc { get; set; }
         public DateTime? DeletedAtUtc { get; set; }
-        //public MessageMetadata? Metadata { get; set; }
+        public MessageMetadata? Metadata { get; set; }
         public ICollection<MessageReaction> Reactions { get; set; } = [];
     }
 }
