@@ -16,6 +16,7 @@ namespace Chat.Domain.Entities
         public string? DisplayName { get; set; }
         public string? AvatarUrl { get; set; }
         public UserRoleEnum Role { get; set; } = UserRoleEnum.User;
+        public UserStatusEnum ActivityStatus { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }
 
