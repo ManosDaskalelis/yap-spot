@@ -10,7 +10,6 @@
     <Folder Include="Common\" />
     <Folder Include="Messages\" />
     <Folder Include="Reactions\" />
-    <Folder Include="Rooms\" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -21,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Chat.Contracts\Chat.Contracts.csproj" />
 	  <ProjectReference Include="..\Chat.Domain\Chat.Domain.csproj" />
 	</ItemGroup>
 	

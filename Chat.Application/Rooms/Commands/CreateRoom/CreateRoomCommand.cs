@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Chat.Contracts.Rooms;
+using Chat.Domain.Enums;
+using MediatR;
 
 namespace Chat.Application.Rooms.Commands.CreateRoom
 {
-    public sealed record CreateRoomCommand
-    {
-    }
+    public sealed record CreateRoomCommand(string? RoomName, RoomTypeEnum RoomType) : IRequest<RoomDto>;
 }

@@ -1,13 +1,9 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Infrastructure.Auth;
 using Chat.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chat.Infrastructure
 {
@@ -18,11 +14,16 @@ namespace Chat.Infrastructure
             services.AddDbContext<ChatDbContext>(options =>
             {
                 options.UseNpgsql(
-                    configuration.GetConnectionString("DefaultConnection"));
+                    configuration.GetConnectionString("DefaultConnection"),
+                    o => o.EnableRetryOnFailure());
             });
 
             services.AddScoped<IApplicationDbContext>(provider =>
                 provider.GetRequiredService<ChatDbContext>());
+
+            //services.AddHttpContextAccessor();
+
+            services.AddScoped<ICurrentUserService, TestCurrentUserService>();
 
             return services;
         }

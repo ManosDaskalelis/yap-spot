@@ -1,8 +1,6 @@
-﻿using Chat.Domain.Entities;
-using Chat.Application.Abstractions;
+﻿using Chat.Application.Abstractions;
+using Chat.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection;
 
 namespace Chat.Infrastructure.Persistence
 {
