@@ -1,0 +1,33 @@
+# GitHub Actions CI — ChatApp
+# Place this file at: .github/workflows/ci.yml
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+
+jobs:
+  build:
+    name: Build & Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ChatRoomHub/ChatRoomHub.sln
+
+      - name: Build (Release)
+        run: dotnet build ChatRoomHub/ChatRoomHub.sln --no-restore --configuration Release
