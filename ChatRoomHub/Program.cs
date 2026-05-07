@@ -1,3 +1,4 @@
+using Chat.Api.Endpoints;
 using Chat.Application;
 using Chat.Domain.Entities;
 using Chat.Domain.Enums;
@@ -77,6 +78,8 @@ namespace ChatRoomHub
 
                 return Results.Ok("Fake User Created");
             });
+
+            app.MapRoomEndpoints();
 
             app.Run();
         }

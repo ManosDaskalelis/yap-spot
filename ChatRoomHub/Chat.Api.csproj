@@ -17,7 +17,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Endpoints\" />
 		<Folder Include="Hubs\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Middleware\" />

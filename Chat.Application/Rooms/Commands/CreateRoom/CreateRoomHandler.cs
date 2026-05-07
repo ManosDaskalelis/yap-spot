@@ -25,12 +25,13 @@ namespace Chat.Application.Rooms.Commands.CreateRoom
         public async Task<RoomDto> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.UserId;
+            Enum.TryParse<RoomTypeEnum>(request.RoomType, ignoreCase: true, out var roomType);
 
             var room = new Room
             {
                 Id = Guid.NewGuid(),
                 RoomName = request.RoomName,
-                Type = request.RoomType,
+                Type = roomType,
                 CreatedByUserId = userId,
                 CreatedAtUtc = DateTime.UtcNow
             };
