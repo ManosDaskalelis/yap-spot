@@ -10,6 +10,6 @@ namespace Chat.Domain.Enums
     {
         Text = 1,
         Image = 2,
-        file = 3,
+        File = 3,
     }
 }
