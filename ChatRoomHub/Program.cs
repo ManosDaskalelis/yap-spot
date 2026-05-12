@@ -1,10 +1,13 @@
-using Chat.Api.Endpoints;
+using Chat.Api.Endpoints.Messages;
+using Chat.Api.Endpoints.RoomsEndpoints;
+using Chat.Api.Hubs;
 using Chat.Application;
 using Chat.Domain.Entities;
 using Chat.Domain.Enums;
 using Chat.Infrastructure;
 using Chat.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 namespace ChatRoomHub
 {
@@ -18,6 +21,7 @@ namespace ChatRoomHub
             builder.Services.AddAuthorization();
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddSignalR();
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
@@ -28,30 +32,13 @@ namespace ChatRoomHub
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
+                app.MapGet("/", () => Results.Redirect("/scalar")).WithOpenApi().WithTags("Scalar Endpoint");
             }
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-            //var summaries = new[]
-            //{
-            //    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-            //};
-
-            //app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-            //{
-            //    var forecast = Enumerable.Range(1, 5).Select(index =>
-            //        new WeatherForecast
-            //        {
-            //            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            //            TemperatureC = Random.Shared.Next(-20, 55),
-            //            Summary = summaries[Random.Shared.Next(summaries.Length)]
-            //        })
-            //        .ToArray();
-            //    return forecast;
-            //})
-            //.WithName("GetWeatherForecast");
 
             app.MapGet("/dev/seed-user", async (ChatDbContext db) =>
             {
@@ -77,9 +64,11 @@ namespace ChatRoomHub
                 await db.SaveChangesAsync();
 
                 return Results.Ok("Fake User Created");
-            });
+            }).WithOpenApi().WithTags("Seed user");
 
+            app.MapHub<ChatHub>("/hubs/chat").WithOpenApi().WithTags("Hub");
             app.MapRoomEndpoints();
+            app.MapMessagesEndpoints();
 
             app.Run();
         }

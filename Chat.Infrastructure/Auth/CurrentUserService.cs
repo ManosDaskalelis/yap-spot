@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chat.Infrastructure.Auth
 {
-    internal class CurrentUserService
+    public sealed class CurrentUserService
     {
         //    using System.Security.Claims;
         //using Chat.Application.Abstractions;

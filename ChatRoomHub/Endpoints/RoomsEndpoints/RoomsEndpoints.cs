@@ -1,13 +1,11 @@
-﻿using Chat.Application.Messages.Commands.SendMessage;
-using Chat.Application.Rooms.Commands.CreateRoom;
+﻿using Chat.Application.Rooms.Commands.CreateRoom;
 using Chat.Application.Rooms.Commands.JoinRoom;
-using Chat.Contracts.Messages;
 using Chat.Contracts.Rooms;
 using MediatR;
 
-namespace Chat.Api.Endpoints
+namespace Chat.Api.Endpoints.RoomsEndpoints
 {
-    public static class RoomsEndpoint
+    public static class RoomsEndpoints
     {
         public static void MapRoomEndpoints(this IEndpointRouteBuilder app)
         {
@@ -23,12 +21,6 @@ namespace Chat.Api.Endpoints
             group.MapPost("/{roomId:guid}/join", async (Guid roomId, ISender sender, CancellationToken ct) =>
             {
                 var result = await sender.Send(new JoinRoomCommand(roomId), ct);
-                return Results.Ok(result);
-            });
-
-            group.MapPost("/{roomId:guid}/messages", async (Guid roomId, SendMessageRequest request, ISender sender, CancellationToken ct) =>
-            {
-                var result = await sender.Send(new SendMessageCommand(roomId, request.content), ct);
                 return Results.Ok(result);
             });
         }

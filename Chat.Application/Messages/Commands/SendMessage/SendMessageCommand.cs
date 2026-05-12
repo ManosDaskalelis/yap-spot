@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace Chat.Application.Messages.Commands.SendMessage
 {
-    public sealed record SendMessageCommand(Guid RoomId, string Content): IRequest<MessageDto>;
+    public sealed record SendMessageCommand(Guid RoomId, string Content): IRequest<Guid>;
 }

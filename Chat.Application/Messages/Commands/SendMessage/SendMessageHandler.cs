@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Chat.Application.Messages.Commands.SendMessage
 {
-    public sealed class SendMessageHandler : IRequestHandler<SendMessageCommand, MessageDto>
+    public sealed class SendMessageHandler : IRequestHandler<SendMessageCommand, Guid>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ICurrentUserService _currentUserService;
@@ -23,7 +23,7 @@ namespace Chat.Application.Messages.Commands.SendMessage
             _dbContext = dbContext;
         }
 
-        public async Task<MessageDto> Handle(SendMessageCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(SendMessageCommand request, CancellationToken cancellationToken)
         {
             if (request.Content == null)
             {
@@ -59,7 +59,7 @@ namespace Chat.Application.Messages.Commands.SendMessage
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return new MessageDto(message.Id, message.RoomId, message.SenderId, message.Content, message.Type.ToString(), message.CreatedAtUtc);
+            return message.Id;
 
         }
     }

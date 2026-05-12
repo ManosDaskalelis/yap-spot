@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Chat.Application.Rooms.Commands.CreateRoom
 {
-    public sealed class CreateRoomHandler : IRequestHandler<CreateRoomCommand, RoomDto>
+    public sealed class CreateRoomHandler : IRequestHandler<CreateRoomCommand, Guid>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ICurrentUserService _currentUser;
@@ -22,7 +22,7 @@ namespace Chat.Application.Rooms.Commands.CreateRoom
             _currentUser = currentUser;
         }
 
-        public async Task<RoomDto> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.UserId;
             Enum.TryParse<RoomTypeEnum>(request.RoomType, ignoreCase: true, out var roomType);
@@ -49,12 +49,7 @@ namespace Chat.Application.Rooms.Commands.CreateRoom
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return new RoomDto(
-                room.Id,
-                room.RoomName,
-                room.Type.ToString(),
-                room.CreatedAtUtc
-                );
+            return room.Id;
         }
     }
 }

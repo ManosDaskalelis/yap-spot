@@ -14,10 +14,10 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="Scalar.AspNetCore" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Hubs\" />
 		<Folder Include="Extensions\" />
 		<Folder Include="Middleware\" />
 		<Folder Include="Auth\" />
