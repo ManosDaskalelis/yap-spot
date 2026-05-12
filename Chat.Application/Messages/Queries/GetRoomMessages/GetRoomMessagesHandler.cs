@@ -35,7 +35,7 @@ namespace Chat.Application.Messages.Queries.GetRoomMessages
 
             if (!isMember)
             {
-                throw new ArgumentException("You are not a member of this room");
+                throw new UnauthorizedAccessException("You are not a member of this room.");
             }
 
             var messages = new List<string>();

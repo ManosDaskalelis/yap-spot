@@ -43,7 +43,7 @@ namespace Chat.Application.Messages.Commands.SendMessage
 
             if (!isMember)
             {
-                throw new ArgumentException("You are not a member of this room");
+                throw new UnauthorizedAccessException("You are not a member of this room.");
             }
 
             var message = new Message

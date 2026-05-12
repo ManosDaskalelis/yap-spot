@@ -1,3 +1,4 @@
+using Chat.Api.Endpoints;
 using Chat.Api.Endpoints.Messages;
 using Chat.Api.Endpoints.RoomsEndpoints;
 using Chat.Api.Hubs;
@@ -25,6 +26,17 @@ namespace ChatRoomHub
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ClientPolicy", policy =>
+                {
+                    policy.WithOrigins("http://127.0.0.1:5500")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                });
+            });
 
             var app = builder.Build();
 
@@ -66,9 +78,11 @@ namespace ChatRoomHub
                 return Results.Ok("Fake User Created");
             }).WithOpenApi().WithTags("Seed user");
 
-            app.MapHub<ChatHub>("/hubs/chat").WithOpenApi().WithTags("Hub");
+            app.UseCors("ClientPolicy");
+            app.MapHub<ChatHub>("/hubs/chat");
             app.MapRoomEndpoints();
             app.MapMessagesEndpoints();
+            app.MapReactionEndpoints();
 
             app.Run();
         }
