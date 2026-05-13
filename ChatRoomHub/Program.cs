@@ -1,6 +1,7 @@
 using Chat.Api.Endpoints.Messages;
 using Chat.Api.Endpoints.ReactionEndpoints;
 using Chat.Api.Endpoints.RoomsEndpoints;
+using Chat.Api.Extensions;
 using Chat.Api.Hubs;
 using Chat.Application;
 using Chat.Domain.Entities;
@@ -39,6 +40,8 @@ namespace ChatRoomHub
             });
 
             var app = builder.Build();
+
+            app.UseGlobalExceptionHandling();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
