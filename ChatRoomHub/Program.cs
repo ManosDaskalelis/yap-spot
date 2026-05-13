@@ -1,5 +1,5 @@
-using Chat.Api.Endpoints;
 using Chat.Api.Endpoints.Messages;
+using Chat.Api.Endpoints.ReactionEndpoints;
 using Chat.Api.Endpoints.RoomsEndpoints;
 using Chat.Api.Hubs;
 using Chat.Application;

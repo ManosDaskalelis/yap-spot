@@ -51,7 +51,9 @@ namespace Chat.Application.Messages.Queries.GetRoomMessages
                     x.SenderId,
                     x.Content,
                     x.Type,
-                    x.CreatedAtUtc
+                    x.CreatedAtUtc,
+                    x.EditedAtUtc,
+                    x.DeletedAtUtc
                 }).ToListAsync(cancellationToken);
 
             var messageIds = messages
@@ -79,7 +81,7 @@ namespace Chat.Application.Messages.Queries.GetRoomMessages
 
             return messages
                 .OrderBy(x => x.CreatedAtUtc)
-                .Select(x => new MessageDto(Id: x.Id, RoomId: x.RoomId, SenderId: x.SenderId, Content: x.Content, Type: x.Type.ToString(), CreatedAtUtc: x.CreatedAtUtc, Reactions: reactionsByMessage.TryGetValue(x.Id, out var messageReactions) ? messageReactions : [])).ToList();
+                .Select(x => new MessageDto(Id: x.Id, RoomId: x.RoomId, SenderId: x.SenderId, Content: x.DeletedAtUtc is null ? x.Content : "This message was deleted", Type: x.Type.ToString(), CreatedAtUtc: x.CreatedAtUtc, Reactions: reactionsByMessage.TryGetValue(x.Id, out var messageReactions) ? messageReactions : [])).ToList();
         }
     }
 }

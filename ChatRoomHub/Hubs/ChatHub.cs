@@ -1,4 +1,6 @@
-﻿using Chat.Application.Messages.Commands.SendMessage;
+﻿using Chat.Application.Messages.Commands.DeleteMessage;
+using Chat.Application.Messages.Commands.EditMessage;
+using Chat.Application.Messages.Commands.SendMessage;
 using Chat.Application.Messages.Queries.GetRoomMessages;
 using Chat.Application.Reactions.Commands.AddReaction;
 using Chat.Application.Reactions.Commands.RemoveReaction;
@@ -68,6 +70,20 @@ namespace Chat.Api.Hubs
             var reaction = await _sender.Send(new RemoveReactionCommand(MessageId, Emoji));
             Console.WriteLine($"Reaction removed {Emoji}");
             await Clients.Group(reaction.RoomId.ToString()).SendAsync("ReactionRemoved", reaction);
+        }
+
+        public async Task EditMessage(Guid MessageId, string Content)
+        {
+            var message = await _sender.Send(new EditMessageCommand(MessageId, Content));
+            Console.WriteLine($"{MessageId} message was edited");
+            await Clients.Group(message.RoomId.ToString()).SendAsync("MessageEdited", message);
+        }
+
+        public async Task DeleteMessage(Guid MessageId)
+        {
+            var message = await _sender.Send(new DeleteMessageCommand(MessageId));
+            Console.WriteLine($"{MessageId} message was deleted");
+            await Clients.Group(message.RoomId.ToString()).SendAsync("MessageDeleted", message);
         }
     }
 }
