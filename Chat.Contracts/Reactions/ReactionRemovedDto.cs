@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Chat.Contracts.Reactions
 {
-    public sealed record ReactionDto(Guid MessageId, Guid RoomId, Guid UserId, string Emoji, DateTime CreatedAtUtc);
+    public sealed record ReactionRemovedDto(Guid MessageId, Guid RoomId, Guid UserId, string Emoji);
 }

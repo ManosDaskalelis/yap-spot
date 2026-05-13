@@ -1,5 +1,7 @@
 ﻿using Chat.Application.Messages.Commands.SendMessage;
 using Chat.Application.Messages.Queries.GetRoomMessages;
+using Chat.Application.Reactions.Commands.AddReaction;
+using Chat.Application.Reactions.Commands.RemoveReaction;
 using Chat.Application.Rooms.Queries;
 using Chat.Domain.Entities;
 using MediatR;
@@ -52,6 +54,20 @@ namespace Chat.Api.Hubs
                 Console.WriteLine(msg);
             }
             await Clients.Group(RoomId.ToString()).SendAsync("ReceiveRoomMessage", messages);
+        }
+
+        public async Task AddReaction(Guid MessageId, string Emoji)
+        {
+            var reaction = await _sender.Send(new AddReactionCommand(MessageId, Emoji));
+            Console.WriteLine($"Reaction added {Emoji}");
+            await Clients.Group(reaction.RoomId.ToString()).SendAsync("ReactionAdded", reaction);
+        }
+
+        public async Task RemoveReaction(Guid MessageId, string Emoji)
+        {
+            var reaction = await _sender.Send(new RemoveReactionCommand(MessageId, Emoji));
+            Console.WriteLine($"Reaction removed {Emoji}");
+            await Clients.Group(reaction.RoomId.ToString()).SendAsync("ReactionRemoved", reaction);
         }
     }
 }

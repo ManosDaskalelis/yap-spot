@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Contracts.Reactions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,10 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Chat.Application.Reactions.Commands.RemoveReaction
 {
-    public sealed class RemoveReactionHandler : IRequestHandler<RemoveReactionCommand, bool>
+    public sealed class RemoveReactionHandler : IRequestHandler<RemoveReactionCommand, ReactionRemovedDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ICurrentUserService _currentUserService;
@@ -20,7 +22,7 @@ namespace Chat.Application.Reactions.Commands.RemoveReaction
             _dbContext = dbContext;
         }
 
-        public async Task<bool> Handle(RemoveReactionCommand request, CancellationToken cancellationToken)
+        public async Task<ReactionRemovedDto> Handle(RemoveReactionCommand request, CancellationToken cancellationToken)
         {
             var message = await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
             var userId = _currentUserService.UserId;
@@ -49,7 +51,12 @@ namespace Chat.Application.Reactions.Commands.RemoveReaction
             _dbContext.MessageReactions.Remove(alreadyReacted);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return true;
+            return new ReactionRemovedDto(
+                alreadyReacted.MessageId,
+                message.RoomId,
+                alreadyReacted.UserId,
+                alreadyReacted.Emoji
+            );
 
         }
     }

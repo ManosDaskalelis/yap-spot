@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Emojis;
 using Chat.Contracts.Reactions;
 using Chat.Domain.Entities;
 using MediatR;
@@ -45,7 +46,7 @@ namespace Chat.Application.Reactions.Commands.AddReaction
             {
                 UserId = userId,
                 MessageId = request.MessageId,
-                Emoji = request.Emoji,
+                Emoji = EmojiNormalizer.Normalize(request.Emoji),
                 CreatedAtUtc = DateTime.UtcNow
             };
 
@@ -57,6 +58,7 @@ namespace Chat.Application.Reactions.Commands.AddReaction
 
             return new ReactionDto(
                 reaction.MessageId,
+                message.RoomId,
                 reaction.UserId,
                 reaction.Emoji,
                 reaction.CreatedAtUtc

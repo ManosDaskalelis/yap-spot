@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Chat.Contracts.Reactions;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace Chat.Application.Reactions.Commands.RemoveReaction
 {
-     public sealed record RemoveReactionCommand(Guid MessageId, string Emoji    ): IRequest<bool>;
+     public sealed record RemoveReactionCommand(Guid MessageId, string Emoji): IRequest<ReactionRemovedDto>;
 }
