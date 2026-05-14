@@ -44,4 +44,4 @@ ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 # Run the application
-ENTRYPOINT ["dotnet", "ChatRoomHub.dll"]
+ENTRYPOINT ["dotnet", "Chat.Api.dll"]
