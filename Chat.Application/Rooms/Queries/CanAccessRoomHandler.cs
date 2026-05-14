@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Exceptions;
 using Chat.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,14 +30,14 @@ namespace Chat.Application.Rooms.Queries
 
             if (!roomExists)
             {
-                throw new ArgumentException("Room not found");
+                throw new NotFoundException("Room not found");
             }
 
             var isMember = await _dbContext.RoomMembers.AnyAsync(x => x.RoomId == request.RoomId && x.UserId == userId, cancellationToken);
 
             if (!isMember)
             {
-                throw new ArgumentException("You are not a member of this room");
+                throw new ForbiddenException("You are not a member of this room");
             }
 
             return true;

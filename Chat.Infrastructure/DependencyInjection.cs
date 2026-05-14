@@ -21,7 +21,7 @@ namespace Chat.Infrastructure
             services.AddScoped<IApplicationDbContext>(provider =>
                 provider.GetRequiredService<ChatDbContext>());
 
-            //services.AddHttpContextAccessor();
+            services.AddHttpContextAccessor();
 
             services.AddScoped<ICurrentUserService, TestCurrentUserService>();
 

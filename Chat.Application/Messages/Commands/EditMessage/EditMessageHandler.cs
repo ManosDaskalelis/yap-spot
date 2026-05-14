@@ -1,12 +1,9 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Exceptions;
 using Chat.Contracts.Messages;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chat.Application.Messages.Commands.EditMessage
 {
@@ -26,7 +23,7 @@ namespace Chat.Application.Messages.Commands.EditMessage
         {
             if (string.IsNullOrEmpty(request.Content))
             {
-                throw new ArgumentException("Message content cannot be empty");
+                throw new Common.Exceptions.ValidationException("Message content cannot be empty");
             }
 
             var userId = _currentUserService.UserId;
@@ -34,13 +31,13 @@ namespace Chat.Application.Messages.Commands.EditMessage
             var message = await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
 
             if (message is null)
-                throw new InvalidOperationException("Message not found.");
+                throw new NotFoundException("Message not found.");
 
             if (message.DeletedAtUtc is not null)
-                throw new InvalidOperationException("Cannot edit a deleted message.");
+                throw new Common.Exceptions.ValidationException("Cannot edit a deleted message.");
 
             if (message.SenderId != userId)
-                throw new UnauthorizedAccessException("You can only edit your own messages.");
+                throw new ForbiddenException("You can only edit your own messages.");
 
             message.Content = request.Content;
             message.EditedAtUtc = DateTime.UtcNow;

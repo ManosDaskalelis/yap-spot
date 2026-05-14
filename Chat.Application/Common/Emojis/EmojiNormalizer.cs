@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chat.Application.Common.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,7 @@ namespace Chat.Application.Common.Emojis
             if (EmojiMap.ContainsValue(normalized))
                 return normalized;
 
-            throw new ArgumentException($"Emoji {input} is not supported");
+            throw new NotFoundException($"Emoji {input} is not supported");
         }
     }
 }

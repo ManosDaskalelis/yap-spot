@@ -1,12 +1,8 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Exceptions;
 using Chat.Contracts.Messages;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chat.Application.Messages.Commands.DeleteMessage
 {
@@ -30,13 +26,13 @@ namespace Chat.Application.Messages.Commands.DeleteMessage
                 .FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
 
             if (message is null)
-                throw new InvalidOperationException("Message not found.");
+                throw new NotFoundException("Message not found.");
 
             if (message.DeletedAtUtc is not null)
-                throw new InvalidOperationException("Message is already deleted.");
+                throw new ValidationException("Message is already deleted.");
 
             if (message.SenderId != userId)
-                throw new UnauthorizedAccessException("You can only delete your own messages.");
+                throw new ForbiddenException("You can only delete your own messages.");
 
             var now = DateTime.UtcNow;
 

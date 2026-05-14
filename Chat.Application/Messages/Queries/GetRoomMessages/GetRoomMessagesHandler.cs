@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Exceptions;
 using Chat.Contracts.Messages;
 using Chat.Contracts.Reactions;
 using Chat.Domain.Entities;
@@ -30,14 +31,14 @@ namespace Chat.Application.Messages.Queries.GetRoomMessages
 
             if (!roomExists)
             {
-                throw new ArgumentException("Room not found");
+                throw new NotFoundException("Room not found");
             }
 
             var isMember = await _dbContext.RoomMembers.AsNoTracking().AnyAsync(x => x.UserId == userId && x.RoomId == request.RoomId, cancellationToken);
 
             if (!isMember)
             {
-                throw new UnauthorizedAccessException("You are not a member of this room.");
+                throw new ForbiddenException("You are not a member of this room.");
             }
 
             var messages = await _dbContext.Messages

@@ -1,9 +1,11 @@
-﻿using Chat.Application.Messages.Commands.DeleteMessage;
+﻿using Chat.Application.Common.Emojis;
+using Chat.Application.Messages.Commands.DeleteMessage;
 using Chat.Application.Messages.Commands.EditMessage;
 using Chat.Application.Messages.Commands.SendMessage;
 using Chat.Application.Messages.Queries.GetRoomMessages;
 using Chat.Application.Reactions.Commands.AddReaction;
 using Chat.Application.Reactions.Commands.RemoveReaction;
+using Chat.Application.Rooms.Commands.LeaveRoom;
 using Chat.Application.Rooms.Queries;
 using Chat.Domain.Entities;
 using MediatR;
@@ -22,6 +24,7 @@ namespace Chat.Api.Hubs
 
         public async Task SubscribeToRoom(Guid RoomId)
         {
+
             var canAccess = await _sender.Send(new CanAccessRoomQuery(RoomId));
 
             if (!canAccess)
@@ -38,6 +41,13 @@ namespace Chat.Api.Hubs
         {
             Console.WriteLine("Connection terminated");
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, RoomId.ToString());
+        }
+
+        public async Task LeaveRoom(Guid RoomId)
+        {
+            var result = await _sender.Send(new LeaveRoomCommand(RoomId));
+            Console.WriteLine($"User Left room {RoomId}");
+            await Clients.Group(RoomId.ToString()).SendAsync("LeaveRoomMessage", result);
         }
 
         public async Task SendRoomMessage(Guid RoomId, string Content)
@@ -60,9 +70,10 @@ namespace Chat.Api.Hubs
 
         public async Task AddReaction(Guid MessageId, string Emoji)
         {
-            var reaction = await _sender.Send(new AddReactionCommand(MessageId, Emoji));
+            var reaction = await _sender.Send(new AddReactionCommand(MessageId, EmojiNormalizer.Normalize(Emoji)));
             Console.WriteLine($"Reaction added {Emoji}");
             await Clients.Group(reaction.RoomId.ToString()).SendAsync("ReactionAdded", reaction);
+
         }
 
         public async Task RemoveReaction(Guid MessageId, string Emoji)

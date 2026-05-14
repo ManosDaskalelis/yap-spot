@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Exceptions;
 using Chat.Contracts.Messages;
 using Chat.Domain.Entities;
 using Chat.Domain.Enums;
@@ -27,7 +28,7 @@ namespace Chat.Application.Messages.Commands.SendMessage
         {
             if (request.Content == null)
             {
-                throw new ArgumentException("Cannot sent null message");
+                throw new NotFoundException("Message cannot be null");
             }
 
             var userId = _currentUserService.UserId;
@@ -36,14 +37,14 @@ namespace Chat.Application.Messages.Commands.SendMessage
 
             if (!roomExists)
             {
-                throw new ArgumentException("Room not found");
+                throw new NotFoundException("Room not found");
             }
 
             var isMember = await _dbContext.RoomMembers.AnyAsync(x => x.RoomId == request.RoomId && x.UserId == userId, cancellationToken);
 
             if (!isMember)
             {
-                throw new UnauthorizedAccessException("You are not a member of this room.");
+                throw new ForbiddenException("You are not a member of this room.");
             }
 
             var message = new Message

@@ -30,4 +30,7 @@ jobs:
         run: dotnet restore ChatRoomHub/ChatRoomHub.sln
 
       - name: Build (Release)
-        run: dotnet build ChatRoomHub/ChatRoomHub.sln --no-restore --configuration Release
+        run: dotnet build ChatApp.sln --no-restore --configuration Release
+
+      - name: Build Docker image (test only)
+        run: docker build -t chat-api:test .

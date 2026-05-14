@@ -1,5 +1,6 @@
 ﻿using Chat.Application.Abstractions;
 using Chat.Application.Common.Emojis;
+using Chat.Application.Common.Exceptions;
 using Chat.Contracts.Reactions;
 using Chat.Domain.Entities;
 using MediatR;
@@ -25,21 +26,21 @@ namespace Chat.Application.Reactions.Commands.AddReaction
 
             if (message == null)
             {
-                throw new ArgumentException("There is no message to react to");
+                throw new NotFoundException("Message not found");
             }
 
             var isMember = await _dbContext.RoomMembers.AsNoTracking().AnyAsync(x => x.RoomId == message.RoomId && x.UserId == userId, cancellationToken);
 
             if (!isMember)
             {
-                throw new UnauthorizedAccessException("You are not a member of this room");
+                throw new ForbiddenException("You are not a member of this room");
             }
 
             var alreadyReacted = await _dbContext.MessageReactions.AsNoTracking().AnyAsync(x => x.UserId == userId && x.MessageId == request.MessageId && x.Emoji == request.Emoji.Trim(), cancellationToken);
 
             if (alreadyReacted)
             {
-                throw new InvalidOperationException("You already reacted with this emoji.");
+                throw new ConflictException("You already reacted with this emoji.");
             }
 
             var reaction = new MessageReaction

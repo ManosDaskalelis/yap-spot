@@ -1,5 +1,6 @@
 ﻿using Chat.Application.Rooms.Commands.CreateRoom;
 using Chat.Application.Rooms.Commands.JoinRoom;
+using Chat.Application.Rooms.Commands.LeaveRoom;
 using Chat.Contracts.Rooms;
 using MediatR;
 
@@ -21,6 +22,12 @@ namespace Chat.Api.Endpoints.RoomsEndpoints
             group.MapPost("/{roomId:guid}/join", async (Guid roomId, ISender sender, CancellationToken ct) =>
             {
                 var result = await sender.Send(new JoinRoomCommand(roomId), ct);
+                return Results.Ok(result);
+            });
+
+            group.MapPost("/{roomId:guid}/leave", async (Guid roomId, ISender sender, CancellationToken ct) =>
+            {
+                var result = await sender.Send(new LeaveRoomCommand(roomId), ct);
                 return Results.Ok(result);
             });
         }

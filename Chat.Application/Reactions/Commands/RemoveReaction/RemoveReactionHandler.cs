@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Exceptions;
 using Chat.Contracts.Reactions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,21 +30,21 @@ namespace Chat.Application.Reactions.Commands.RemoveReaction
 
             if (message == null)
             {
-                throw new ArgumentException("There is no message to react to");
+                throw new NotFoundException("There is no message to react to");
             }
 
             var isMember = await _dbContext.RoomMembers.AsNoTracking().AnyAsync(x => x.RoomId == message.RoomId && x.UserId == userId, cancellationToken);
 
             if (!isMember)
             {
-                throw new UnauthorizedAccessException("You are not a member of this room");
+                throw new ForbiddenException("You are not a member of this room");
             }
 
             var alreadyReacted = await _dbContext.MessageReactions.FirstOrDefaultAsync(x => x.UserId == userId && x.MessageId == request.MessageId && x.Emoji == request.Emoji.Trim(), cancellationToken);
 
             if (alreadyReacted == null)
             {
-                throw new InvalidOperationException("No reaction to remove");
+                throw new ConflictException("No reaction to remove");
             }
 
             message.EditedAtUtc = DateTime.UtcNow;

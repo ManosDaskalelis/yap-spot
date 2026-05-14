@@ -1,4 +1,5 @@
 ﻿using Chat.Application.Abstractions;
+using Chat.Application.Common.Exceptions;
 using Chat.Contracts.Rooms;
 using Chat.Domain.Entities;
 using Chat.Domain.Enums;
@@ -31,14 +32,14 @@ namespace Chat.Application.Rooms.Commands.JoinRoom
 
             if (roomExists == null)
             {
-                throw new Exception("Room not found");
+                throw new NotFoundException("Room not found");
             }
 
             var alreadyJoined = await _dbContext.RoomMembers.AnyAsync(x => x.UserId == userId && x.RoomId == request.RoomId, cancellationToken);
 
             if (alreadyJoined)
             {
-                throw new Exception("Already joined");
+                throw new ConflictException("Already joined");
             }
 
             var member = new RoomMember
