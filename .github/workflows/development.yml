@@ -27,7 +27,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        run: dotnet restore ChatRoomHub/ChatRoomHub.sln
+        run: dotnet restore ChatApp.sln
 
       - name: Build (Release)
         run: dotnet build ChatApp.sln --no-restore --configuration Release
