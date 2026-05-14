@@ -8,6 +8,7 @@ COPY ChatApp.sln ./
 # Copy all project files
 COPY ChatRoomHub/*.csproj ChatRoomHub/
 COPY Chat.Application/*.csproj Chat.Application/
+COPY Chat.Contracts/*.csproj Chat.Contracts/
 COPY Chat.Domain/*.csproj Chat.Domain/
 COPY Chat.Infrastructure/*.csproj Chat.Infrastructure/
 
