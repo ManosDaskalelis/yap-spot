@@ -32,7 +32,7 @@ namespace ChatRoomHub
             {
                 options.AddPolicy("ClientPolicy", policy =>
                 {
-                    policy.WithOrigins("http://127.0.0.1:5500", "https://signalr-client-yap-spot.netlify.app/")
+                    policy.WithOrigins("http://127.0.0.1:5500", "https://signalr-client-yap-spot.netlify.app")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
@@ -52,7 +52,7 @@ namespace ChatRoomHub
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("ClientPolicy");
             app.UseAuthorization();
 
             app.MapGet("/dev/seed-user", async (ChatDbContext db) =>
@@ -81,7 +81,6 @@ namespace ChatRoomHub
                 return Results.Ok("Fake User Created");
             }).WithOpenApi().WithTags("Seed user");
 
-            app.UseCors("ClientPolicy");
             app.MapHub<ChatHub>("/hubs/chat");
             app.MapRoomEndpoints();
             app.MapMessagesEndpoints();
