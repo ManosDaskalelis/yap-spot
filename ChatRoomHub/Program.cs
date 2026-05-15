@@ -32,7 +32,7 @@ namespace ChatRoomHub
             {
                 options.AddPolicy("ClientPolicy", policy =>
                 {
-                    policy.WithOrigins("http://127.0.0.1:5500")
+                    policy.WithOrigins("http://127.0.0.1:5500", "https://signalr-client-yap-spot.netlify.app/")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();
